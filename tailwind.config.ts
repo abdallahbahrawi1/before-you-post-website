@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
+import colors from "tailwindcss/colors";
 
 const config: Config = {
   content: [
@@ -8,9 +10,36 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        float: 'float 3s ease-in-out infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+      },
+      container: {
+        center: true,
+        padding: "1.5rem",
+        screens: {sm: "100%", md: "100%", lg: "100%", xl: "1200px"},
+      },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        mono: ["var(--font-geist-mono)", ...fontFamily.mono],
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        purple: {
+          ...colors.purple,
+          DEFAULT: '#6B4DE6',
+        },
+        red: {
+          ...colors.red,
+        },
+        'deep-blue': '#1B2D45',
+        coral: '#FF7676',
+        mint: '#7DEDBA',
+        light: '#FAFBFF',
       },
     },
   },

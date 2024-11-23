@@ -1,0 +1,639 @@
+<html><head><base href="." />
+<style>
+:root {
+  --purple: #6B4DE6;
+  --coral: #FF7676;
+  --deep-blue: #1B2D45;
+  --mint: #7DEDBA;
+  --light: #FAFBFF;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--light);
+  color: var(--deep-blue);
+  overflow-x: hidden;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(250, 251, 255, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  box-shadow: 0 2px 20px rgba(27, 45, 69, 0.05);
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--purple), var(--coral));
+  -webkit-background-clip: text;
+  color: transparent;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--deep-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--purple);
+}
+
+.nav-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--purple);
+  color: white;
+  border: none;
+  box-shadow: 0 5px 15px rgba(107, 77, 230, 0.15);
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(107, 77, 230, 0.2);
+}
+
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 7rem 5% 2rem; /* Added to account for fixed navbar */
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  right: -20%;
+  top: -20%;
+  width: 60%;
+  height: 60%;
+  background: var(--mint);
+  opacity: 0.1;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: pulse 10s ease-in-out infinite;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--purple), var(--coral));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--deep-blue);
+  opacity: 0.8;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.cta-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.cta-button {
+  padding: 1.2rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--purple), var(--coral));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(107, 77, 230, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(107, 77, 230, 0.3);
+}
+
+.cta-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.cta-button:hover::after {
+  transform: translateX(100%);
+}
+
+.btn {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: white;
+  border: none;
+  box-shadow: 0 10px 20px rgba(107, 77, 230, 0.15);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(107, 77, 230, 0.2);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--purple);
+  color: var(--purple);
+}
+
+.btn-secondary:hover {
+  background: rgba(107, 77, 230, 0.1);
+}
+
+.floating-cards {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  position: absolute;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.card:nth-child(2) {
+  top: 50%;
+  right: 5%;
+  animation-delay: 1s;
+}
+
+.card:nth-child(3) {
+  bottom: 20%;
+  left: 20%;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.2); opacity: 0.2; }
+}
+
+.how-it-works {
+  padding: 5rem 5%;
+  background: white;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, var(--purple), var(--coral));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.steps-container::after {
+  content: '';
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--coral));
+  z-index: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+  background: white;
+}
+
+.step-icon {
+  width: 120px;
+  height: 120px;
+  background: rgba(107, 77, 230, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.step:hover .step-icon {
+  transform: translateY(-5px);
+}
+
+.step h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--deep-blue);
+}
+
+.step p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--deep-blue);
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    display: none;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .visual {
+    display: none;
+  }
+  
+  .steps-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .steps-container::after {
+    display: none;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.benefits {
+  padding: 5rem 5%;
+  background: linear-gradient(135deg, rgba(107, 77, 230, 0.05), rgba(255, 118, 118, 0.05));
+}
+
+.benefits-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
+.benefits-subtitle {
+  font-size: 1.2rem;
+  color: var(--deep-blue);
+  opacity: 0.8;
+  margin-top: 1rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(107, 77, 230, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--deep-blue);
+}
+
+.feature-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--deep-blue);
+  opacity: 0.8;
+}
+
+.sign-in-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 1rem 2rem;
+  background: linear-gradient(135deg, rgba(107, 77, 230, 0.05), rgba(255, 118, 118, 0.05));
+}
+
+.sign-in-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.sign-in-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sign-in-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--purple), var(--coral));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--deep-blue);
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(27, 45, 69, 0.1);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--purple);
+}
+
+.forgot-password {
+  display: block;
+  text-align: right;
+  color: var(--purple);
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.sign-in-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--purple), var(--coral));
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sign-in-btn:hover {
+  transform: translateY(-2px);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: var(--deep-blue);
+  opacity: 0.5;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(27, 45, 69, 0.1);
+}
+
+.divider span {
+  padding: 0 1rem;
+}
+
+.social-sign-in {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.social-btn {
+  padding: 0.75rem;
+  border: 2px solid rgba(27, 45, 69, 0.1);
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.social-btn:hover {
+  background: rgba(27, 45, 69, 0.05);
+}
+
+.sign-up-prompt {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--deep-blue);
+}
+
+.sign-up-link {
+  color: var(--purple);
+  text-decoration: none;
+  font-weight: 600;
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="https://example.com" class="logo">supportify</a>
+  <div class="nav-links">
+    <a href="https://example.com/features" class="nav-link">Features</a>
+    <a href="https://example.com/pricing" class="nav-link">Pricing</a>
+    <a href="https://example.com/community" class="nav-link">Community</a>
+    <button class="nav-btn">Sign In</button>
+  </div>
+</nav>
+
+<div class="sign-in-container">
+  <div class="sign-in-card">
+    <div class="sign-in-header">
+      <h1 class="sign-in-title">Welcome Back</h1>
+      <p>Sign in to continue to Supportify</p>
+    </div>
+    
+    <form>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="Enter your email">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" placeholder="Enter your password">
+      </div>
+      
+      <a href="https://example.com/forgot-password" class="forgot-password">Forgot Password?</a>
+      
+      <button type="submit" class="sign-in-btn">Sign In</button>
+      
+      <div class="divider">
+        <span>or continue with</span>
+      </div>
+      
+      <div class="social-sign-in">
+        <button type="button" class="social-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--deep-blue)">
+            <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"/>
+          </svg>
+          Google
+        </button>
+        
+        <button type="button" class="social-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--deep-blue)">
+            <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"/>
+          </svg>
+          Facebook
+        </button>
+      </div>
+    </form>
+    
+    <p class="sign-up-prompt">
+      Don't have an account? <a href="https://example.com/sign-up" class="sign-up-link">Sign up</a>
+    </p>
+  </div>
+</div>
+
+</body></html>
