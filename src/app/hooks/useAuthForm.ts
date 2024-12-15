@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from 'axios';
+
 import { AuthFields } from "@/types/types";
 
 const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
@@ -22,10 +23,17 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
     try {
       const response = await axios.post(apiUrl, formData);
       console.log(response.data);
-      window.location.href = 'http://localhost:3000';
-    } catch (err) {
-      console.error(err);
-      setError('An error occurred. Please try again.');
+      window.location.href = 'dashboard';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      let errorMessage = ""
+      if(error.response){
+        errorMessage = error.response?.data?.error || "An error occurred. Please try again."
+      }else{
+        errorMessage = error;
+      }
+      console.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

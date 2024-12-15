@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface FormGroupProps {
   label: string;
   type: string;

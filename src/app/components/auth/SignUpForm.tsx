@@ -9,11 +9,9 @@ import { AuthFields } from "@/types/types";
 
 const SignUpForm = () => {
   const initialFields: AuthFields = {
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
     password: '',
-    confirmPassword: '',
     termsAccepted: false,
   };
 
@@ -22,20 +20,12 @@ const SignUpForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <FormGroup
-        label="First Name"
+        label="Full Name"
         type="text"
-        name="firstName"
-        value={formData.firstName || ''}
+        name="fullName"
+        value={formData.fullName || ''}
         onChange={handleChange}
-        placeholder="Enter your first name"
-      />
-      <FormGroup
-        label="Last Name"
-        type="text"
-        name="lastName"
-        value={formData.lastName || ''}
-        onChange={handleChange}
-        placeholder="Enter your last name"
+        placeholder="Enter your full name"
       />
       <FormGroup
         label="Email"
@@ -53,15 +43,12 @@ const SignUpForm = () => {
         onChange={handleChange}
         placeholder="Create a password"
       />
-      <FormGroup
-        label="Confirm Password"
-        type="password"
-        name="confirmPassword"
-        value={formData.confirmPassword || ''}
+      <Checkbox
+        name="termsAccepted"
+        checked={formData.termsAccepted ?? false}
         onChange={handleChange}
-        placeholder="Confirm your password"
       />
-      <Checkbox checked={formData.termsAccepted ?? false} onChange={handleChange} />
+
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <SubmitButton loading={loading} label="Create Account" />
     </form>

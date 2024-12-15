@@ -4,14 +4,21 @@ const PRIVACY_URL = 'https://example.com/privacy';
 import { ChangeEvent } from 'react';
 
 interface CheckboxProps {
+  name: string;
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Checkbox = ({ checked, onChange }: CheckboxProps) => (
+const Checkbox = ({ name, checked, onChange }: CheckboxProps) => (
   <div className="form-group mb-6">
     <label className="checkbox-container flex items-center">
-      <input type="checkbox" className="mr-2" checked={checked} onChange={onChange} />
+      <input
+        type="checkbox"
+        className="mr-2"
+        name={name}
+        checked={checked}
+        onChange={onChange}
+      />
       <span className="checkbox-text text-blue-900">
         I agree to the{' '}
         <a href={TERMS_URL} className="text-purple-500 font-semibold hover:underline">
@@ -25,4 +32,5 @@ const Checkbox = ({ checked, onChange }: CheckboxProps) => (
     </label>
   </div>
 );
+
 export default Checkbox;

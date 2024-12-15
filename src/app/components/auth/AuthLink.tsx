@@ -1,3 +1,6 @@
+import Link from 'next/link'
+
+
 interface AuthLinkProps {
   message: string;
   linkText: string;
@@ -8,9 +11,9 @@ const AuthLink: React.FC<AuthLinkProps> = ({ message, linkText, linkHref }) => (
   <div className="text-center mt-6">
     <p className="text-blue-900">
       {message}{' '}
-      <a href={linkHref} className="text-purple-500 font-semibold hover:underline">
+      <Link href={linkHref} className="text-purple-500 font-semibold hover:underline">
         {linkText}
-      </a>
+      </Link>
     </p>
   </div>
 );

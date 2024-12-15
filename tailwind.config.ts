@@ -29,6 +29,7 @@ const config: Config = {
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
       },
       colors: {
+        primary: '#4F46E5',
         purple: {
           ...colors.purple,
           DEFAULT: '#6B4DE6',

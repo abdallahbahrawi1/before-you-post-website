@@ -1,8 +1,8 @@
 import Divider from "../components/ui/Divider";
 import SocialSignInButtons from "../components/common/SocialSignInButtons";
-import AuthHeader from "../components/common/AuthHeader";
-import AuthLink from "../components/common/AuthLink";
-import SignUpForm from "../components/sections/SignUpForm";
+import AuthHeader from "../components/auth/AuthHeader";
+import AuthLink from "../components/auth/AuthLink";
+import SignUpForm from "../components/auth/SignUpForm";
 
 const SignUp = () => {
   return (
@@ -12,10 +12,10 @@ const SignUp = () => {
         <SignUpForm />
         <Divider text="or sign up with" />
         <SocialSignInButtons />
-        <AuthLink 
-          message="Already have an account?" 
-          linkText="Sign In" 
-          linkHref="/signin" 
+        <AuthLink
+          message="Already have an account?"
+          linkText="Sign In"
+          linkHref="/signin"
         />
       </div>
     </section>
