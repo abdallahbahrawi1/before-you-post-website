@@ -1,4 +1,4 @@
-import React from 'react';
+
 import '../styles/Footer.css';
 import FooterColumn from './FooterColumn';
 import SocialLinks from './SocialLinks';

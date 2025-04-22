@@ -1,23 +1,35 @@
 'use client';
 
-import { useState } from "react";
 import Tabs from "./Tabs";
+import Steps from "../wizard-steps/Steps";
 import PointsTracker from "./PointsTracker";
 import ActiveRequests from "./ActiveRequests";
 import History from "./History";
-import NewRequestForm from "./NewRequestForm";
+// import NewRequestForm from "./NewRequestForm";
+import RequestWizard from "./RequestWizard";
+import { TabKeys } from "@/constants/TabKeys";
+import { useTabs, Tab } from "../..//hooks/useTabs";
+import CancelButton from "../ui/CancelButton";
+
+
+
+const tabs: Tab[] = [
+  { id: TabKeys.ACTIVE, label: "Active Requests" },
+  { id: TabKeys.HISTORY, label: "History" },
+  { id: TabKeys.NEW, label: "New Request" },
+];
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("active");
+  const { activeTab, setActiveTab } = useTabs(tabs);
 
   const renderContent = () => {
     switch (activeTab) {
-      case "active":
+      case TabKeys.ACTIVE:
         return <ActiveRequests />;
-      case "history":
+      case TabKeys.HISTORY:
         return <History />;
-      case "new":
-        return <NewRequestForm />;
+      case TabKeys.NEW:
+        return <RequestWizard />;
       default:
         return null;
     }
@@ -25,8 +37,16 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto py-28 p-6 space-y-6">
-      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <PointsTracker />
+      {activeTab === TabKeys.NEW ? (
+        <div>
+          <CancelButton onClick={() => setActiveTab(TabKeys.ACTIVE)} />
+          <Steps currentStepIndex={steps} />
+        </div>
+      )
+        : (
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={tabs} />
+        )}
       {renderContent()}
     </div>
   );

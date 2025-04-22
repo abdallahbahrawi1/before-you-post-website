@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/app.css'; // Import the CSS
 import { FaRegHandshake, FaShareAlt, FaUsers } from 'react-icons/fa';
 import Image from 'next/image';
-import supportImage from '../../../../public/assets/support.jpg'; 
+import supportImage from '../../../../public/assets/support.jpg';
 
 
 const FeaturesImage = () => (

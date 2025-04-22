@@ -12,7 +12,7 @@ const HowItWorks = () => (
 
       <div className="flex flex-col items-center text-center p-8 bg-white relative z-10">
         <div className="w-28 h-28 bg-[#6B4DE61A] rounded-full flex items-center justify-center mb-6 transition-transform duration-300 transform hover:translate-y-[-5px]">
-        <CiFaceSmile className="text-purple-600 text-5xl hover:text-purple-800 transition-all duration-200"  style={{ color: "purple" }} />
+          <CiFaceSmile className="text-purple-600 text-5xl hover:text-purple-800 transition-all duration-200" style={{ color: "purple" }} />
         </div>
         <h3 className="text-xl font-bold text-[#1B2D45] mb-4">Help Others</h3>
         <p className="text-base leading-7 text-[#1B2D45] opacity-80">Share your knowledge and engage with the community. Every meaningful interaction earns you valuable points.</p>
@@ -20,7 +20,7 @@ const HowItWorks = () => (
 
       <div className="flex flex-col items-center text-center p-8 bg-white relative z-10">
         <div className="w-28 h-28 bg-[#6B4DE61A] rounded-full flex items-center justify-center mb-6 transition-transform duration-300 transform hover:translate-y-[-5px]">
-        <CiTrophy className="text-purple-600 fill-current text-5xl hover:text-purple-800 transition-all duration-200" style={{ color: '#4169E1' }} />
+          <CiTrophy className="text-purple-600 fill-current text-5xl hover:text-purple-800 transition-all duration-200" style={{ color: '#4169E1' }} />
         </div>
         <h3 className="text-xl font-bold text-[#1B2D45] mb-4">Earn Credits</h3>
         <p className="text-base leading-7 text-[#1B2D45] opacity-80">Watch your points stack up as you contribute. The more you help, the more credits you collect.</p>
@@ -28,7 +28,7 @@ const HowItWorks = () => (
 
       <div className="flex flex-col items-center text-center p-8 bg-white relative z-10">
         <div className="w-28 h-28 bg-[#6B4DE61A] rounded-full flex items-center justify-center mb-6 transition-transform duration-300 transform hover:translate-y-[-5px]">
-        <FaRocket className="text-purple-600 fill-current text-5xl hover:text-purple-800 transition-all duration-200" style={{ color: '#9B4DFF' }} />
+          <FaRocket className="text-purple-600 fill-current text-5xl hover:text-purple-800 transition-all duration-200" style={{ color: '#9B4DFF' }} />
         </div>
         <h3 className="text-xl font-bold text-[#1B2D45] mb-4">Boost Your Content</h3>
         <p className="text-base leading-7 text-[#1B2D45] opacity-80">Use your earned credits to promote your own content and increase visibility in the community.</p>
