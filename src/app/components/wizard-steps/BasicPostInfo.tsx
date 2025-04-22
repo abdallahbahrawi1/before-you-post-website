@@ -27,8 +27,8 @@ const BasicPostInfo = ({
 
   // Whenever title/content changes, inform parent
   useEffect(() => {
-    onChange({ ...initialData, title, content });
-  }, [title, content]);
+    onChange({ title, content, image: initialData.image ?? null });
+  }, [title, content, onChange, initialData.image]);
   
   const handleNextClick = () => {
     onNext();
@@ -42,7 +42,7 @@ const BasicPostInfo = ({
           Share the post you need help with, and the community will provide feedback.
         </p>
         
-        <form>
+        <form onSubmit ={(e) => e.preventDefault()}>
           {/* Post Link or Content */}
           <div className="mb-4">
             <label >

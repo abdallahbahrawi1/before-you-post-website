@@ -1,7 +1,6 @@
 'use client';
 
 import Tabs from "./Tabs";
-import Steps from "../wizard-steps/Steps";
 import PointsTracker from "./PointsTracker";
 import ActiveRequests from "./ActiveRequests";
 import History from "./History";
@@ -39,10 +38,9 @@ const Dashboard = () => {
     <div className="container mx-auto py-28 p-6 space-y-6">
       <PointsTracker />
       {activeTab === TabKeys.NEW ? (
-        <div>
+        <>
           <CancelButton onClick={() => setActiveTab(TabKeys.ACTIVE)} />
-          <Steps currentStepIndex={steps} />
-        </div>
+        </>
       )
         : (
           <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={tabs} />
