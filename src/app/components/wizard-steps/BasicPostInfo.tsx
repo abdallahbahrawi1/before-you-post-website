@@ -1,38 +1,28 @@
-import { useEffect, useState } from "react";
+"use client";
 
-interface InitialData {
-  title: string;
-  content: string;
-  image: File | null;
+import { RequestFormData } from "@/types/types";
+import { useBasicPostInfoForm } from "@/app/hooks/useBasicPostInfoForm";
+import { useWordCountPoints }    from "@/app/hooks//useWordCountPoints";
+
+
+interface BasicPostInfoProps {
+  initialData: RequestFormData;
+  onChange: (data: RequestFormData) => void;
+  onNext: () => void;
 }
 
 const BasicPostInfo = ({
     initialData, 
     onChange, 
     onNext
-  }: {
-    initialData: InitialData;
-    onChange: (data: InitialData) => void;
-    onNext: () => void;
-    }) => {
-  const [title, setTitle] = useState(initialData.title || "");
-  const [content, setContent] = useState(initialData.content || "");
-  const [points, setPoints] = useState(0);
+  }: BasicPostInfoProps) => {
 
+  const {values, errors, handleChange, validate} = useBasicPostInfoForm(initialData, onChange);
+  const points = useWordCountPoints(values.content, 10);
 
-  useEffect(() => {
-    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
-    setPoints(Math.floor(wordCount / 10));
-  }, [content]);
-
-  // Whenever title/content changes, inform parent
-  useEffect(() => {
-    onChange({ title, content, image: initialData.image ?? null });
-  }, [title, content, onChange, initialData.image]);
-  
-  const handleNextClick = () => {
-    onNext();
-  };
+  const handleNext = () => {
+    if (validate()) onNext();
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -51,10 +41,14 @@ const BasicPostInfo = ({
                 type="text"
                 className="w-full border border-gray-300 rounded-md p-2 mb-2"
                 placeholder="E.g., How to improve my post?"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={values.title}
+                onChange={handleChange("title")}
+                onBlur={validate}
                 required
                 />
+            {errors.title && (
+              <p className="text-sm text-red-600 mt-1">{errors.title}</p>
+            )}
             </label>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Post Content:
@@ -62,21 +56,25 @@ const BasicPostInfo = ({
             <textarea
               className="w-full border border-gray-300 rounded-md p-2"
               rows={5}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Paste the link to your post or describe the post here..."
+              value={values.content}
+              onChange={handleChange("content")} 
+              onBlur={validate}
+              placeholder="Paste your LinkedIn or Twitter Post here or write your draft directly"
               required
             />
+            {errors.content && (
+              <p className="text-sm text-red-600 mt-1">{errors.content}</p>
+            )}
           </div>
           <div className="mt-3">
             Estimated Points: <span className="font-semibold">{points}</span>
           </div>
           <button
             type="submit"
-            onClick={handleNextClick}
+            onClick={handleNext}
             className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition"
           >
-            Submit Request
+            Next: Add Image 
           </button>
         </form>
       </div>

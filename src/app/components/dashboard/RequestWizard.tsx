@@ -1,69 +1,62 @@
-import { useCallback, useEffect, useState } from "react"
+"use client";
+
+import { useCallback } from "react"
 import BasicPostInfo from "../wizard-steps/BasicPostInfo"
 import Steps from "../wizard-steps/Steps";
+import { useLocalStorage } from "@/app/hooks/useLocalStorage";
+import { RequestFormData } from "@/types/types";
+import { useWizard } from "@/app/hooks/useWizard";
+import ImageUploadStep from "../wizard-steps/ImageUploadStep";
+import ContentTypeCategoriesStep from "../wizard-steps/ContentTypeStep/ContentTypeCategoriesStep";
+
+const INITIAL_FORM_DATA = {
+  title: "",
+  content: "",
+  image: null,
+ }
+
+
 const RequestWizard = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [maxStepReached, setMaxStepReached] = useState(0);
+  const {currentStep, setCurrentStep, maxStepReached, goNext} = useWizard();
 
-  const [formData, setFormData] = useState<{
-    title: string;
-    content: string;
-    image: File | null;
-  }>({
-    title: "",
-    content: "",
-    image: null,
-  })
+  const [formData, setFormData] = useLocalStorage<RequestFormData>("newRequestFormData", INITIAL_FORM_DATA);
 
-  const handleFormDataChange = useCallback((data: { title: string; content: string; image: File | null }) => {
+  const handleFormDataChange = useCallback((data: RequestFormData) => {
     setFormData(data)
-  }, [])
-
-  useEffect(() => {
-    const savedData = localStorage.getItem("newRequestFormData");
-    if(savedData) {
-      setFormData(JSON.parse(savedData));
-    }
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem("newRequestFormData", JSON.stringify(formData));
-  }, [formData])
-
-  const goNext = () => {
-    setCurrentStep((prev) => {
-      const next = prev + 1;
-      setMaxStepReached((prev) => Math.max(prev, next));
-      return next;
-    });
-  }
+  }, [setFormData])
 
   const renderStepComponent = () => {
     switch (currentStep) {
       case 0:
-        return <BasicPostInfo 
+        return <BasicPostInfo
           initialData={formData}
           onChange={handleFormDataChange}
           onNext={goNext}
         />;
-        // case 1:
-        // return <AddImage onNext={goNext} />;
+      case 1:
+        return <ImageUploadStep
+          initialData={formData}
+          onChange={handleFormDataChange}
+          onNext={goNext}
+        />
+      case 2:
+        return <ContentTypeCategoriesStep />
       // Add other steps here
       default:
-        return <div className="text-center text-xl">Step Not Found!</div>;
+        return <div className="text-center text-xl">Step Not Found!{currentStep}</div>;
     }
   }
 
   return (
     <>
-      <Steps 
+      <Steps
         currentStepIndex={currentStep}
         maxStepReached={maxStepReached}
         onStepClick={(stepIndex: number) => {
           if (stepIndex <= maxStepReached) setCurrentStep(stepIndex);
-         }}
-        />
-        {renderStepComponent()}
+        }}
+      />
+      {renderStepComponent()}
     </>
   )
 }

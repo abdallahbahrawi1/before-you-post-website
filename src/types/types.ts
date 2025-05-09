@@ -13,3 +13,9 @@ export interface Request {
   responses: number;
   likes: number;
 }
+
+export interface RequestFormData {
+  title: string;
+  content: string;
+  image: string | null;
+}
