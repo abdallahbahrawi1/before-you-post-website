@@ -1,0 +1,93 @@
+"use client";
+
+import { useCallback } from "react"
+import BasicPostInfo from "@/features/wizard-steps/first-step/BasicPostInfo";
+import ImageUploadStep from "@/features/wizard-steps/second-step/ImageUploadStep";
+import ContentTypeCategoriesStep from "@/features/wizard-steps/third-step/ContentTypeCategoriesStep";
+import Steps from "@/features/wizard-steps/steps/Steps";
+
+import { RequestFormData } from "@/types/types";
+import { useWizard } from "@/features/dashboard/hooks/useWizard";
+import { useLocalStorage } from "@/features/dashboard/hooks/useLocalStorage";
+import SuccessCard from "@/features/wizard-steps/final-step/SuccessCard";
+import { useRouter } from "next/navigation";
+
+
+
+const INITIAL_FORM_DATA: RequestFormData = {
+  title: '',
+  content: '',
+  image: null,
+  contentType: '',
+  otherContentType: '',
+  tags: [],
+};
+
+const RequestWizard = () => {
+  const { currentStep, setCurrentStep, maxStepReached, goNext, reset } = useWizard();
+
+  const [formData, setFormData] = useLocalStorage<RequestFormData>("newRequestFormData", INITIAL_FORM_DATA);
+
+  const handleFormDataChange = useCallback((data: RequestFormData) => {
+    setFormData(data)
+  }, [setFormData])
+
+    /** Simple example: 1 point per tag + 20 base */
+  const pointsUsed = 20 + (formData?.tags?.length ?? 0);
+  const router = useRouter();
+  const viewRequest = () => router.push(`/dashboard/requests`);
+
+
+  const createAnother = () => {
+    // clear form + go back to first step
+    setFormData(INITIAL_FORM_DATA);
+    reset();            // from your wizard hook (sets currentStep = 0, maxStepReached = 0)
+  };
+
+  const renderStepComponent = () => {
+    switch (currentStep) {
+      case 0:
+        return <BasicPostInfo
+          initialData={formData}
+          onChange={handleFormDataChange}
+          onNext={goNext}
+        />;
+      case 1:
+        return <ImageUploadStep
+          initialData={formData}
+          onChange={handleFormDataChange}
+          onNext={goNext}
+        />
+      case 2:
+        return <ContentTypeCategoriesStep 
+          initialData={formData}
+          onChange={handleFormDataChange}
+          onNext={goNext}
+        />
+      case 3:
+        return <SuccessCard
+          data={formData}
+          pointsUsed={pointsUsed}
+          onViewRequest={viewRequest}
+          onCreateAnother={createAnother}
+        />
+      default:
+        return <div className="text-center text-xl">Step Not Found!{currentStep}</div>;
+    }
+  }
+
+  return (
+    <>
+      <Steps
+        currentStepIndex={currentStep}
+        maxStepReached={maxStepReached}
+        onStepClick={(stepIndex: number) => {
+          if (stepIndex <= maxStepReached) setCurrentStep(stepIndex);
+        }}
+      />
+      {renderStepComponent()}
+    </>
+  )
+}
+
+export default RequestWizard

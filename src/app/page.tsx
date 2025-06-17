@@ -1,7 +1,7 @@
-import FeaturesSection from "./components/sections/FeaturesSection"
-import Footer from "./components/common/Footer"
-import HeroSection from "./components/sections/HeroSection"
-import HowItWorks from "./components/sections/HowItWorks"
+import FeaturesSection from "@/features/landing/components/FeaturesSection"
+import Footer from "@/features/landing/components/Footer"
+import HeroSection from "@/features/landing/components/HeroSection"
+import HowItWorks from "@/features/landing/components/HowItWorks"
 
 const HomePage = () => {
   return (
