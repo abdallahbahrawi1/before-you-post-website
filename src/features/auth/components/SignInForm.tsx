@@ -1,9 +1,11 @@
 'use client';
 
 import { AuthFields } from "@/types/types";
-import FormGroup from "../common/FormGroup";
-import SubmitButton from "../common/SubmitButton";
+// import FormGroup from "../common/FormGroup";
+// import SubmitButton from "../common/SubmitButton";
 import useAuthForm from "@/hooks/useAuthForm";
+import FormGroup from "@/ui/layout/FormGroup";
+import { Button } from "@/ui/inputs/Button";
 
 const SignInForm = () => {
   const initialFields: AuthFields = {
@@ -33,7 +35,7 @@ const SignInForm = () => {
         placeholder="Enter your password"
       />
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-      <SubmitButton loading={loading} label="Sign In" />
+      <Button loading={loading}>Sign In</Button>
     </form>
   );
 };

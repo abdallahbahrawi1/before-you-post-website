@@ -1,8 +1,8 @@
-import Divider from "../../components/ui/Divider";
-import SocialSignInButtons from "../../components/common/SocialSignInButtons";
-import AuthHeader from "../../components/auth/AuthHeader";
-import AuthLink from "../../components/auth/AuthLink";
-import SignUpForm from "../../components/auth/SignUpForm";
+import AuthHeader from "@/features/auth/components/AuthHeader";
+import AuthLink from "@/features/auth/components/AuthLink";
+import SignUpForm from "@/features/auth/components/SignUpForm";
+import SocialSignInButtons from "@/features/auth/components/SocialSignInButtons";
+import Divider from "@/ui/layout/Divider";
 
 const SignUp = () => {
   return (

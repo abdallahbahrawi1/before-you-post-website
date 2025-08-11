@@ -1,3 +1,5 @@
+// import Link from 'next/link';
+
 import { Button } from '@/ui/inputs/Button';
 
 const HeroContent: React.FC = () => {
