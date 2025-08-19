@@ -23,11 +23,8 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
     setError('');
     setLoading(true);
     try {
-      loginOrRegister(formData, apiUrl);
-
-
+      await loginOrRegister(formData, apiUrl);
       router.push('/dashboard');
-      // window.location.href = 'dashboard';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       let errorMessage = ""

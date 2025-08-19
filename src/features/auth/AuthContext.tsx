@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { AuthFields } from '@/types/types';
 import { loginOrRegisterAPI } from './Services/AuthService';
+import axios from 'axios';
 
  export type UserProfile = {
   email: string;
@@ -33,13 +34,31 @@ export const UserProvider = ({ children }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    const token = localStorage.getItem("token")
-    if(user && token) {
-      setUser(JSON.parse(user));
-      setToken(token);
+    console.log(1)
+    async function fetchUser() {
+      console.log(2)
+      try {
+        console.log(3)
+        const res = await axios.get("http://localhost:5000/auth/me", {withCredentials: true});
+        console.log(4)
+        console.log(res)
+        const data = res.data as { user: UserProfile };
+        setUser(data.user);
+      } catch (e){
+        console.log(e)
+        setUser(null);
+      }
+      setIsReady(true)
     }
-    setIsReady(true)
+    fetchUser();
+    // const userString = localStorage.getItem("user");
+    // if(userString){
+    //   const userObj: UserProfile = JSON.parse(userString);
+    //   setUser(userObj);
+    // }else {
+    //   setUser(null);
+    // }
+
   }, []);
   
   const loginOrRegister = async (initialFields: AuthFields, apiUrl: string) => {
@@ -49,7 +68,7 @@ export const UserProvider = ({ children }: Props) => {
             email: res?.data?.email,
             fullName: res?.data?.fullName,
           };
-        localStorage.setItem("user", JSON.stringify(res?.data));
+        // localStorage.setItem("user", JSON.stringify(res?.data));
         setUser(userObj);
         console.log(res.data)
       }
@@ -60,10 +79,10 @@ export const UserProvider = ({ children }: Props) => {
   const isLoggedIn = () => !!user;
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setToken("");
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("user");
+    // setUser(null);
+    // setToken("");
     navigate.push("/");
   };
   

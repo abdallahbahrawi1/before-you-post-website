@@ -1,8 +1,11 @@
+import ProtectedRoute from "@/features/auth/Services/ProtectedRoute"
 import VoteFeed from "@/features/vote-feed"
 
 const page = () => {
   return (
-    <VoteFeed />
+    <ProtectedRoute>
+      <VoteFeed />
+    </ProtectedRoute>
   )
 }
 

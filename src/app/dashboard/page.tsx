@@ -1,11 +1,12 @@
+import ProtectedRoute from "@/features/auth/Services/ProtectedRoute"
 import Dashboard from "@/features/dashboard/components/Dashboard"
 
 
 const page = () => {
   return (
-    <div>
+    <ProtectedRoute>
       <Dashboard />
-    </div>
+    </ProtectedRoute>
   )
 }
 
