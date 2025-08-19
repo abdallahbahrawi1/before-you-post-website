@@ -1,10 +1,11 @@
-/////////// this might be delted later ///////////
 import { useState } from "react";
-import axios from 'axios';
-
 import { AuthFields } from "@/types/types";
+import { useAuth } from "@/features/auth/AuthContext";
+import { useRouter } from "next/navigation";
 
 const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
+  const router = useRouter();
+  const { loginOrRegister } = useAuth();
   const [formData, setFormData] = useState(initialFields);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,11 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
     setError('');
     setLoading(true);
     try {
-      const response = await axios.post(apiUrl, formData);
-      console.log(response.data);
-      window.location.href = 'dashboard';
+      loginOrRegister(formData, apiUrl);
+
+
+      router.push('/dashboard');
+      // window.location.href = 'dashboard';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       let errorMessage = ""
@@ -35,6 +38,7 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
       }
       console.error(errorMessage);
       setError(errorMessage);
+
     } finally {
       setLoading(false);
     }

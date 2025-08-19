@@ -1,8 +1,6 @@
 'use client';
 
 import { AuthFields } from "@/types/types";
-// import FormGroup from "../common/FormGroup";
-// import SubmitButton from "../common/SubmitButton";
 import useAuthForm from "@/hooks/useAuthForm";
 import FormGroup from "@/ui/layout/FormGroup";
 import { Button } from "@/ui/inputs/Button";

@@ -1,10 +1,13 @@
 'use client';
 
 import useAuthForm from "@/hooks/useAuthForm";
-import Checkbox from "../common/Checkbox";
-import FormGroup from "../common/FormGroup";
-import SubmitButton from "../common/SubmitButton";
+// import Checkbox from "../common/Checkbox";
+// import FormGroup from "../common/FormGroup";
+// import SubmitButton from "../common/SubmitButton";
 import { AuthFields } from "@/types/types";
+import { Button } from "@/ui/inputs/Button";
+import Checkbox from "@/ui/inputs/Checkbox";
+import FormGroup from "@/ui/layout/FormGroup";
 
 
 const SignUpForm = () => {
@@ -50,7 +53,7 @@ const SignUpForm = () => {
       />
 
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-      <SubmitButton loading={loading} label="Create Account" />
+      <Button loading={loading}>Create Account</Button>
     </form>
   );
 };
