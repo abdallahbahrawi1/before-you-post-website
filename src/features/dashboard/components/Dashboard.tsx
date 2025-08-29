@@ -1,7 +1,6 @@
 'use client';
 
-import ActiveRequests from "./ActiveRequests";
-import History from "./History";
+import Requests from "./Requests";
 import RequestWizard from "./RequestWizard";
 import Tabs from "./Tabs";
 import PointsTracker from "./PointsTracker";
@@ -10,14 +9,8 @@ import { TabKeys } from "@/constants/TabKeys";
 import { Button } from "@/ui/inputs/Button";
 import { FaArrowLeft } from "react-icons/fa";
 
-
-
-
-
-
 const tabs: Tab[] = [
   { id: TabKeys.ACTIVE, label: "Active Requests" },
-  { id: TabKeys.HISTORY, label: "History" },
   { id: TabKeys.NEW, label: "New Request" },
 ];
 
@@ -27,9 +20,7 @@ const Dashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case TabKeys.ACTIVE:
-        return <ActiveRequests />;
-      case TabKeys.HISTORY:
-        return <History />;
+        return <Requests />;
       case TabKeys.NEW:
         return <RequestWizard />;
       default:

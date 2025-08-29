@@ -7,12 +7,14 @@ export interface AuthFields {
 
 export interface Request {
   id: number;
-  status: string;
-  points: number;
+  userId: number;
   title: string;
   description: string;
-  responses: number;
-  likes: number;
+  postContent: string;
+  contentType: string;
+  categories: string[];
+  currentPoints: number;
+  status: string;
 }
 
 export type ContentType =

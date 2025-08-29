@@ -1,16 +1,15 @@
 "use client";
 import avatar from "../../../../public/assets/avatar.png"
 import featuredImage from "../../../../public/assets/featured-image.png"
-// import avatar from "../../../public/assets/avatar.png";
-// import featuredImage from "../../../public/assets/featured-image.png";
 import ProgressBar from "@/ui/data-display/ProgressBar";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useVoteFeed } from "../hooks/useVoteFeed";
 
 import PostPreview from "./PostPreview";
 import MetricRow from "./MetricRow";
 import { DEFAULT_TAGS, DEFAULT_TIPS, METRICS } from "../constants/constants";
-import type { MetricKey, Ratings } from "../types/types";
+import type { MetricKey, Ratings, ReviewSubmission } from "../types/types";
 
 export interface VoteFeedCardProps {
   username?: string;
@@ -26,25 +25,30 @@ export interface VoteFeedCardProps {
   }) => void;
 }
 
-export default function VoteFeed({
-  username = "Alexandre P.",
-  karma = 4200,
-  avatarUrl = avatar.src,
-  featuredImageUrl = featuredImage.src,
-  postTitle = "How I scaled my side-project to $10k MRR in 6 months",
-  postSnippet = "It all started with a simple idea and a lot of coffee...",
-  onSubmit,
-}: VoteFeedCardProps) {
+export default function VoteFeed() {
+  const {
+    currentRequest,
+    isLoading,
+    isSubmitting,
+    error,
+    hasMore,
+    fetchNextRequest,
+    submitReview,
+    skipRequest,
+    clearError
+  } = useVoteFeed();
+
+  // Local state for the form
   const [ratings, setRatings] = useState<Ratings>({});
   const [hover, setHover] = useState<Partial<Record<MetricKey, number>>>({});
-  const ratedCount = Object.keys(ratings).length;
-  const progress = (ratedCount / METRICS.length) * 100;
-  const allRated = ratedCount === METRICS.length;
-
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showTextarea, setShowTextarea] = useState(false);
   const [comment, setComment] = useState("");
 
+  // Derived state
+  const ratedCount = Object.keys(ratings).length;
+  const progress = (ratedCount / METRICS.length) * 100;
+  const allRated = ratedCount === METRICS.length;
 
   const bonus = (comment.trim().length > 0 && showTextarea)
     ? 2
@@ -52,26 +56,131 @@ export default function VoteFeed({
       ? 1
       : 0;
 
+  // Fetch first request on mount
+  useEffect(() => {
+    fetchNextRequest();
+  }, [fetchNextRequest]);
+
+  // Handle review submission
+  const handleSubmit = async (payload: {
+    ratings: Ratings;
+    tags: string[];
+    comment: string;
+  }) => {
+    if (!currentRequest) return;
+
+    const reviewData: ReviewSubmission = {
+      requestId: currentRequest.id,
+      clarityScore: payload.ratings.Clarity || 0,
+      credibilityScore: payload.ratings.Credibility || 0,
+      engagementScore: payload.ratings.Engagement || 0,
+      feedbackTags: payload.tags,
+      overallFeedback: payload.comment || undefined,
+    };
+
+    const success = await submitReview(reviewData);
+    if (success) {
+      // Reset form state after successful submission
+      setRatings({});
+      setHover({});
+      setSelectedTags([]);
+      setComment("");
+      setShowTextarea(false);
+      console.log('Review submitted successfully!');
+    } else {
+      // Error handling - form state preserved so user can retry
+      console.log('Review submission failed - check error message');
+    }
+  };
+
+  // Handle skip
+  const handleSkip = async () => {
+    await skipRequest();
+    // Reset form state here if needed
+  };
+
+  // Loading state
+  if (isLoading && !currentRequest) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p>Loading next request...</p>
+        </div>
+      </div>
+    );
+  }
+
+
+  // No more requests
+  if (!hasMore && !currentRequest) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">All caught up!</h2>
+          <p className="text-gray-600">No more requests to review right now.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2 text-red-600">Error</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => {
+              clearError();
+              fetchNextRequest();
+            }}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main component with current request
+  if (!currentRequest) return null;
+
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   }
 
-  function handleSubmit() {
+  function handleFormSubmit() {
     if (!allRated) return;
-    const payload = { ratings, selectedTags, comment };
-    console.log("submitted", payload);
-    onSubmit?.({ ratings, tags: selectedTags, comment });
-  }
+    const payload = {
+      ratings,
+      tags: selectedTags,
+      comment
+    };
+    handleSubmit(payload);
 
-  function handleSkip() {
+    // Reset form after submission
     setRatings({});
     setHover({});
     setSelectedTags([]);
     setComment("");
     setShowTextarea(false);
-    console.log("skipped");
+  }
+
+  function handleFormSkip() {
+    // Reset form state
+    setRatings({});
+    setHover({});
+    setSelectedTags([]);
+    setComment("");
+    setShowTextarea(false);
+
+    // Call the skip function
+    handleSkip();
   }
 
   return (
@@ -80,12 +189,12 @@ export default function VoteFeed({
         <div className="flex w-full overflow-hidden rounded-2xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.05)] transition">
           {/* Post Preview (Left) */}
           <PostPreview
-            avatarUrl={avatarUrl}
-            username={username}
-            karma={karma}
-            featuredImageUrl={featuredImageUrl}
-            postTitle={postTitle}
-            postSnippet={postSnippet}
+            avatarUrl={currentRequest.user.avatarUrl || avatar.src}
+            username={currentRequest.user.username}
+            karma={currentRequest.user.karma}
+            featuredImageUrl={currentRequest.featuredImageUrl || featuredImage.src}
+            postTitle={currentRequest.title}
+            postSnippet={currentRequest.description}
           />
 
           {/* Feedback Panel (Right) */}
@@ -159,19 +268,32 @@ export default function VoteFeed({
 
             {/* Actions */}
             <div className="mt-8 flex flex-col gap-2">
+              {/* Show error message if submission failed */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-2">
+                  <p className="text-sm text-red-600">{error}</p>
+                  <button
+                    onClick={clearError}
+                    className="text-xs text-red-500 hover:text-red-700 mt-1 underline"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
+
               <button
                 type="button"
-                disabled={!allRated}
-                onClick={handleSubmit}
+                disabled={!allRated || isSubmitting}
+                onClick={handleFormSubmit}
                 className={clsx(
-                  "relative w-full rounded-md px-4 py-3 text-sm font-medium transition", // made parent relative for badge
-                  allRated
+                  "relative w-full rounded-md px-4 py-3 text-sm font-medium transition",
+                  allRated && !isSubmitting
                     ? "bg-indigo-600 text-white hover:-translate-y-0.5 hover:bg-indigo-500 shadow-[0_4px_12px_rgba(95,99,242,0.30)]"
                     : "bg-indigo-300 text-white/90 cursor-not-allowed"
                 )}
               >
-                Submit & Earn Karma
-                {(allRated && (selectedTags.length > 0 || (comment.length > 0 && showTextarea))) && (
+                {isSubmitting ? 'Submitting...' : 'Submit & Earn Karma'}
+                {(allRated && (selectedTags.length > 0 || (comment.length > 0 && showTextarea))) && !isSubmitting && (
                   <span className="absolute -top-2 -right-2 rounded-full bg-yellow-400 px-1 text-xs">
                     +{bonus}
                   </span>
@@ -180,8 +302,9 @@ export default function VoteFeed({
 
               <button
                 type="button"
-                className="w-full rounded-md border border-indigo-600 px-4 py-3 text-sm font-medium text-indigo-600 transition hover:bg-indigo-50"
-                onClick={handleSkip}
+                disabled={isSubmitting}
+                className="w-full rounded-md border border-indigo-600 px-4 py-3 text-sm font-medium text-indigo-600 transition hover:bg-indigo-50 disabled:opacity-50"
+                onClick={handleFormSkip}
               >
                 Skip
               </button>
