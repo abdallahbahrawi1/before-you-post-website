@@ -41,6 +41,7 @@ export function useVoteFeed(): UseVoteFeedReturn {
 
     try {
       const response = await api.get<VoteFeedResponse>('/api/reviews/feed');
+      console.log('Fetched next request:', response.data);
       if (response.data.success) {
         setState(prev => ({
           ...prev,
@@ -70,6 +71,16 @@ export function useVoteFeed(): UseVoteFeedReturn {
 
   // Submit review and fetch next request
   const submitReview = useCallback(async (reviewData: ReviewSubmission): Promise<boolean> => {
+    // Prevent submitting if there's no current request
+    if (!state.currentRequest) {
+      setState(prev => ({
+        ...prev,
+        error: 'No post to review.',
+        isSubmitting: false,
+      }));
+      return false;
+    }
+
     setState(prev => ({ ...prev, isSubmitting: true, error: null }));
 
     try {
@@ -83,10 +94,10 @@ export function useVoteFeed(): UseVoteFeedReturn {
       });
 
       if (response.data.success) {
-        // Update user karma
         setState(prev => ({
           ...prev,
           isSubmitting: false,
+          currentRequest: null,
         }));
 
         // Fetch next request automatically
@@ -106,7 +117,15 @@ export function useVoteFeed(): UseVoteFeedReturn {
       // Better error handling for API errors
       let errorMessage = 'Failed to submit review';
       if (error && typeof error === 'object' && 'response' in error) {
-        const apiError = error as { response: { status: number; data?: unknown } };
+        const apiError = error as { response: { status: number; data?: { message?: string } } };
+        
+        if (apiError.response.data?.message?.includes('already reviewed')) {
+          console.log('Request already reviewed, fetching next...');
+          setState(prev => ({ ...prev, isSubmitting: false }));
+          await fetchNextRequest(); // Skip to next request
+          return true; // Treat as success since we're moving forward
+        }
+        
         if (apiError.response.status === 404) {
           errorMessage = 'Review service not available. Please try again later.';
         } else if (apiError.response.status === 401) {
@@ -123,7 +142,7 @@ export function useVoteFeed(): UseVoteFeedReturn {
       }));
       return false;
     }
-  }, [fetchNextRequest]);
+  }, [fetchNextRequest, state.currentRequest]);
 
   // Skip current request and fetch next
   const skipRequest = useCallback(async () => {

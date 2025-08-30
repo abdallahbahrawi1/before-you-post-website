@@ -15,7 +15,7 @@ const getStatusColor = (status: string) => {
 const Requests = () => {
   const { requests, loading, error, deleteRequest } = useRequests();
 
-    const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this request?')) {
       try {
         await deleteRequest(id);
@@ -74,8 +74,8 @@ const Requests = () => {
           </div>
           <div className="flex mt-4 justify-between">
             <button className="btn-secondary px-3 py-1" aria-label="Eidt request">Edit</button>
-            <button 
-              className="btn-secondary px-3 py-1" 
+            <button
+              className="btn-secondary px-3 py-1"
               aria-label="Delete request"
               onClick={() => handleDelete(req.id)}
             >

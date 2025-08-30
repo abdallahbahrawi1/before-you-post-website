@@ -34,8 +34,8 @@ export interface ReviewSubmission {
 export interface VoteFeedResponse {
   success: boolean;
   data: {
-    request: VoteFeedRequest | null;
     hasMore: boolean;
+    request: VoteFeedRequest | null;
     userKarma: number;
   };
   message?: string;

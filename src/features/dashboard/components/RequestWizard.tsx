@@ -11,6 +11,7 @@ import { useWizard } from "@/features/dashboard/hooks/useWizard";
 import { useLocalStorage } from "@/features/dashboard/hooks/useLocalStorage";
 import SuccessCard from "@/features/wizard-steps/final-step/SuccessCard";
 import { useRouter } from "next/navigation";
+import ConfirmAndPostCard from "@/features/wizard-steps/fifth-step/ConfirmAndPostCard";
 
 
 
@@ -32,7 +33,7 @@ const RequestWizard = () => {
     setFormData(data)
   }, [setFormData])
 
-    /** Simple example: 1 point per tag + 20 base */
+  /** Simple example: 1 point per tag + 20 base */
   const pointsUsed = 20 + (formData?.tags?.length ?? 0);
   const router = useRouter();
   const viewRequest = () => router.push(`/dashboard/requests`);
@@ -59,12 +60,17 @@ const RequestWizard = () => {
           onNext={goNext}
         />
       case 2:
-        return <ContentTypeCategoriesStep 
+        return <ContentTypeCategoriesStep
           initialData={formData}
           onChange={handleFormDataChange}
           onNext={goNext}
         />
-      case 3:
+      case 3: 
+        return <ConfirmAndPostCard 
+          data={formData}
+          pointsUsed={pointsUsed}
+          />
+      case 4:
         return <SuccessCard
           data={formData}
           pointsUsed={pointsUsed}

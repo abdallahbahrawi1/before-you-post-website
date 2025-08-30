@@ -2,16 +2,13 @@
 
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; 
+import axios from 'axios';
 
 import React from 'react';
 import { AuthFields } from '@/types/types';
 import { loginOrRegisterAPI } from './Services/AuthService';
-import axios from 'axios';
+import { UserProfile } from './types/authTypes';
 
- export type UserProfile = {
-  email: string;
-  fullName: string;
-};
 
 type UserContextType = {
   loginOrRegister: (initialFields: AuthFields, apiUrl: string) => void;
@@ -23,9 +20,9 @@ type UserContextType = {
   isLoggedIn: () => boolean;
 };
 
-type Props = { children: React.ReactNode };
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-const UserContext = createContext<UserContextType>({} as UserContextType);
+type Props = { children: React.ReactNode };
 
 export const UserProvider = ({ children }: Props) => {
   const navigate = useRouter();
@@ -34,16 +31,23 @@ export const UserProvider = ({ children }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    console.log(1)
     async function fetchUser() {
-      console.log(2)
       try {
-        console.log(3)
-        const res = await axios.get("http://localhost:5000/auth/me", {withCredentials: true});
-        console.log(4)
-        console.log(res)
-        const data = res.data as { user: UserProfile };
-        setUser(data.user);
+        type MeResponse = { user: UserProfile } | UserProfile;
+
+        const res = await axios.get<MeResponse>("http://localhost:5000/auth/me", {withCredentials: true});
+
+        const payload = (res.data as any)?.user ?? res.data;
+
+        // Normalize + validate at compile time
+        const userObj = {
+          id: Number(payload?.id),
+          email: String(payload?.email ?? ""),
+          fullName: String(payload?.fullName ?? ""),
+          karma: Number(payload?.karma ?? 0),
+        } satisfies UserProfile;
+
+        setUser(userObj);
       } catch (e){
         console.log(e)
         setUser(null);
@@ -62,27 +66,24 @@ export const UserProvider = ({ children }: Props) => {
   }, []);
   
   const loginOrRegister = async (initialFields: AuthFields, apiUrl: string) => {
-    await loginOrRegisterAPI(initialFields, apiUrl).then(res => {
-      if (res) {
-        const userObj: UserProfile = {
-            email: res?.data?.email,
-            fullName: res?.data?.fullName,
-          };
-        // localStorage.setItem("user", JSON.stringify(res?.data));
-        setUser(userObj);
-        console.log(res.data)
-      }
-    })
-    .catch((e) => console.log(e));
-  }
+    const res = await loginOrRegisterAPI(initialFields, apiUrl);
+    
+    const payload = (res?.data as any)?.user ?? res?.data;
+
+    const userObj = {
+      id: Number(payload?.id),
+      email: String(payload?.email ?? ""),
+      fullName: String(payload?.fullName ?? ""),
+      karma: Number(payload?.karma ?? 0),
+    } satisfies UserProfile;
+
+    setUser(userObj);
+  };
   
   const isLoggedIn = () => !!user;
 
   const logout = () => {
-    // localStorage.removeItem("token");
-    // localStorage.removeItem("user");
-    // setUser(null);
-    // setToken("");
+    setUser(null);
     navigate.push("/");
   };
   
@@ -95,4 +96,9 @@ export const UserProvider = ({ children }: Props) => {
   );
 };
 
-export const useAuth = () => React.useContext(UserContext);
+/** Safe consumer */
+export const useAuth = () => {
+  const ctx = React.useContext(UserContext);
+  if (!ctx) throw new Error("useAuth must be used within <UserProvider>");
+  return ctx;
+};
