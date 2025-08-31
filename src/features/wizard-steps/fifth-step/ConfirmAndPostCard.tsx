@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import iconSrc from "../../../../public/assets/coin_icon.png";
 import { RequestFormData } from "@/types/types";
@@ -7,13 +7,11 @@ import { createRequest } from "@/Services/RequestsService";
 
 
 type ConfirmAndPostCardProps = {
-  data: RequestFormData;      // full form data for preview
+  formData: RequestFormData;      // full form data for preview
   pointsUsed: number;         // total points required for this post
-  currentBalance: number;     // user's current points balance
   onBack: () => void;         // CTA: go back to edit
-  onConfirm: () => void;      // CTA: confirm & post
   onEarn: () => void;         // CTA: go earn more points
-
+  onNext: () => void;      // CTA: confirm & post
 };
 
 const BASE_FEE = 10; // MVP constants
@@ -23,12 +21,11 @@ const EXPEDITED = 0;
 export default function ConfirmAndPostCard({
   formData,
   pointsUsed,
-  currentBalance,
   onBack,
   onEarn,
-  onConfirm,
+  onNext,
 }: ConfirmAndPostCardProps) {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -41,14 +38,25 @@ export default function ConfirmAndPostCard({
     []
   );
 
-  // MVP: total always 10
-  const pointsUsed = BASE_FEE; 
-  const balance = user?.karma ?? 0;
+  useEffect(() => {
+    if (!errorMsg) return;
+    const id = setTimeout(() => setErrorMsg(null), 6000);
+    return () => clearTimeout(id);
+  }, [errorMsg]);
 
-    const submitRequest = async () => {
+  const lineItems = fees;
+  const totalRequired = pointsUsed;
+  const remaining = (user?.karma ?? 0) - totalRequired;
+  const isInsufficient = remaining < 0;
+
+
+  const submitRequest = async () => {
+    if (isInsufficient || submitting) return;
+
     setErrorMsg(null);
     setSubmitting(true);
     try {
+      console.log(formData)
       const result = await createRequest(formData);
 
       // Update local user points from server
@@ -56,7 +64,7 @@ export default function ConfirmAndPostCard({
         setUser({ ...user, karma: result.balanceAfter });
       }
 
-      goNext(); // to SuccessCard
+      onNext(); // to SuccessCard
     } catch (err: any) {
       // Surface simple, helpful error
       const msg =
@@ -83,6 +91,28 @@ export default function ConfirmAndPostCard({
           <Image src={iconSrc} alt="Coin icon" width={24} height={24} className="shrink-0" />
           <h1 className="text-lg font-semibold text-gray-800">Step 4: Confirm & Post</h1>
         </header>
+
+        {/* Request error (network/server) */}
+        {errorMsg && (
+          <div
+            role="alert"
+            aria-live="assertive"
+            tabIndex={-1}
+            className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <p className="font-medium">Couldn’t post your request.</p>
+              <button
+                type="button"
+                onClick={() => setErrorMsg(null)}
+                className="text-red-700/80 hover:text-red-900"
+              >
+                Dismiss
+              </button>
+            </div>
+            <p className="mt-1">{errorMsg}</p>
+          </div>
+        )}
 
         {/* Alert (Insufficient Points) */}
         {isInsufficient && (
@@ -122,7 +152,7 @@ export default function ConfirmAndPostCard({
         <div className={["text-sm", isInsufficient ? "text-red-600" : "text-gray-600"].join(" ")}>
           <p className="flex justify-between">
             <span>Your balance</span>
-            <span className="font-medium text-gray-800">{currentBalance} pts</span>
+            <span className="font-medium text-gray-800">{(user?.karma)} pts</span>
           </p>
           <p className="flex justify-between mt-1">
             <span>Remaining after submit</span>
@@ -152,11 +182,12 @@ export default function ConfirmAndPostCard({
           {!isInsufficient && (
             <button
               type="button"
-              onClick={onConfirm}
+              onClick={submitRequest}
+              disabled={submitting}
               className="w-full font-semibold px-4 py-3 rounded-lg border border-transparent cursor-pointer transition bg-purple-700 text-white hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-700"
               id="confirm-btn"
             >
-              Confirm &amp; Post
+              {submitting ? "Posting..." : "Confirm & Post"}
             </button>
           )}
 
@@ -172,7 +203,6 @@ export default function ConfirmAndPostCard({
           )}
         </footer>
       </div>
-
     </main>
   );
 }

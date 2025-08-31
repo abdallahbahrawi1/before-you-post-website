@@ -13,17 +13,18 @@ export async function createRequest(
   // Send only what's needed for MVP. Server enforces points logic.
   const payload = {
     title: data.title,
-    content: data.content,
-    image: data.image,          
+    postContent: data.postContent,
+    image: data.imageUrl,
     contentType: data.contentType || data.otherContentType || "other",
     tags: data.tags || [],
   };
 
-  const res = await axios.post<CreateRequestResponse>("/api/requests", payload, {
+  const res = await axios.post<CreateRequestResponse>("http://localhost:5000/api/requests", payload, {
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true 
   });
-
   return res.data;
 }
+

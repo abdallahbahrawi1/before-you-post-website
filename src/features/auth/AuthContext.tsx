@@ -6,8 +6,9 @@ import axios from 'axios';
 
 import React from 'react';
 import { AuthFields } from '@/types/types';
-import { loginOrRegisterAPI } from './Services/AuthService';
+// import { loginOrRegisterAPI } from './Services/AuthService';
 import { UserProfile } from './types/authTypes';
+import { loginOrRegisterAPI } from '@/Services/AuthService';
 
 
 type UserContextType = {

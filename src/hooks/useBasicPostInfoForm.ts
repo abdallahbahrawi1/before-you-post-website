@@ -5,10 +5,10 @@ import { RequestFormData } from "@/types/types";
 
 const schema = yup.object({
   title:   yup.string().trim().required("Title is required"),
-  content: yup.string().trim().required("Content is required"),
+  postContent: yup.string().trim().required("Content is required"),
 });
 
-type Fields = { title: string; content: string };
+type Fields = { title: string; postContent: string };
 type Errors = Partial<Record<keyof Fields, string>>;
 
 export function useBasicPostInfoForm(
@@ -17,14 +17,17 @@ export function useBasicPostInfoForm(
 ) {
   const [values, setValues] = useState<Fields>({
     title:   initialData.title   || "",
-    content: initialData.content || "",
+    postContent: initialData.postContent || "",
   });
   const [errors, setErrors] = useState<Errors>({});
 
-  // propagate up on every field change
   useEffect(() => {
-    onChange({ ...values, image: initialData.image ?? null });
-  }, [values, onChange, initialData.image]);
+    onChange({
+      ...initialData,           // keep all fields from initialData
+      ...values,                // override title and postContent
+      imageUrl: initialData.imageUrl ?? null,
+    });
+  }, [values, onChange, initialData]);
 
   const handleChange =
     (field: keyof Fields) =>

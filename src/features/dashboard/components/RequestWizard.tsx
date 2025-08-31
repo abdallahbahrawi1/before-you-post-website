@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react"
-import BasicPostInfo from "@/features/wizard-steps/first-step/BasicPostInfo";
+import BasicPostInfo from "@/features/wizard-steps/forth-step/BasicPostInfo";
 import ImageUploadStep from "@/features/wizard-steps/second-step/ImageUploadStep";
 import ContentTypeCategoriesStep from "@/features/wizard-steps/third-step/ContentTypeCategoriesStep";
 import Steps from "@/features/wizard-steps/steps/Steps";
@@ -17,9 +17,9 @@ import ConfirmAndPostCard from "@/features/wizard-steps/fifth-step/ConfirmAndPos
 
 const INITIAL_FORM_DATA: RequestFormData = {
   title: '',
-  content: '',
-  image: null,
-  contentType: '',
+  postContent: '',
+  imageUrl: null,
+  contentType: 'other',
   otherContentType: '',
   tags: [],
 };
@@ -34,7 +34,7 @@ const RequestWizard = () => {
   }, [setFormData])
 
   /** Simple example: 1 point per tag + 20 base */
-  const pointsUsed = 20 + (formData?.tags?.length ?? 0);
+  const pointsUsed = 10;
   const router = useRouter();
   const viewRequest = () => router.push(`/dashboard/requests`);
 
@@ -67,8 +67,11 @@ const RequestWizard = () => {
         />
       case 3: 
         return <ConfirmAndPostCard 
-          data={formData}
-          pointsUsed={pointsUsed}
+            formData={formData}
+            pointsUsed={pointsUsed}
+            onNext={goNext}
+            onBack={() => setCurrentStep(2)}
+            onEarn={() => router.push("/dashboard/post-feed")}
           />
       case 4:
         return <SuccessCard

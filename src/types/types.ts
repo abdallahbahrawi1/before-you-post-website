@@ -18,7 +18,6 @@ export interface Request {
 }
 
 export type ContentType =
-  | ''          
   | 'linkedin'
   | 'twitter'
   | 'instagram'
@@ -28,9 +27,8 @@ export type ContentType =
 
 export interface RequestFormData {
   title: string;
-  content: string;
-  image: string | null;
-  
+  postContent: string;
+  imageUrl: string | null;
   contentType: ContentType;
   otherContentType?: string;
   tags: string[];

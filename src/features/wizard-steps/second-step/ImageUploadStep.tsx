@@ -17,12 +17,12 @@ interface Props {
 
 const ImageUploadStep: React.FC<Props> = ({ initialData, onChange, onNext }) => {
   const { fileInputRef, previewUrl, error, handlers } = useImageUpload({
-    initialUrl: initialData.image,
-    onChange: url => onChange({ ...initialData, image: url }),
+    initialUrl: initialData.imageUrl,
+    onChange: url => onChange({ ...initialData, imageUrl: url }),
   });
 
   const skip = () => {
-    onChange({ ...initialData, image: null });
+    onChange({ ...initialData, imageUrl: null });
     onNext();
   };
 

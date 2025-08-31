@@ -8,7 +8,8 @@ export function useWordCountPoints(
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
-    const count = text.trim().split(/\s+/).filter(Boolean).length;
+    const safeText = typeof text === "string" ? text : "";
+    const count = safeText.trim().split(/\s+/).filter(Boolean).length;
     setPoints(Math.floor(count / wordsPerPoint));
   }, [text, wordsPerPoint]);
 

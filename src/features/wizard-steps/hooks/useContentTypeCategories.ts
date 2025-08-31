@@ -8,8 +8,8 @@ export const useContentTypeCategories = (
   onChange: (d: RequestFormData) => void,
 ) => {
   // allow '' so the step starts “un-chosen”
-  const [contentType, setContentType] = useState<ContentType | ''>(
-    initial?.contentType ?? '',
+  const [contentType, setContentType] = useState<ContentType>(
+    initial?.contentType ?? 'other',
   );
   const [otherContentType, setOtherContentType] = useState(initial?.otherContentType ?? '');
   const [tagInput, setTagInput] = useState('');

@@ -1,7 +1,8 @@
 'use client'
+import { useAuth } from '@/features/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
-import { useAuth } from '../AuthContext';
+
 
 
 type Props = { children: React.ReactNode };

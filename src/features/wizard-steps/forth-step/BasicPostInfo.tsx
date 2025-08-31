@@ -18,7 +18,7 @@ const BasicPostInfo = ({
 }: BasicPostInfoProps) => {
 
   const { values, errors, handleChange, validate } = useBasicPostInfoForm(initialData, onChange);
-  const points = useWordCountPoints(values.content, 10);
+  const points = useWordCountPoints(values.postContent, 10);
 
   const handleNext = () => {
     if (validate()) onNext();
@@ -56,14 +56,14 @@ const BasicPostInfo = ({
             <textarea
               className="w-full border border-gray-300 rounded-md p-2"
               rows={5}
-              value={values.content}
-              onChange={handleChange("content")}
+              value={values.postContent}
+              onChange={handleChange("postContent")}
               onBlur={validate}
               placeholder="Paste your LinkedIn or Twitter Post here or write your draft directly"
               required
             />
-            {errors.content && (
-              <p className="text-sm text-red-600 mt-1">{errors.content}</p>
+            {errors.postContent && (
+              <p className="text-sm text-red-600 mt-1">{errors.postContent}</p>
             )}
           </div>
           <div className="mt-3">

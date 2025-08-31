@@ -1,4 +1,4 @@
-import ProtectedRoute from "@/features/auth/Services/ProtectedRoute"
+import ProtectedRoute from "@/Services/ProtectedRoute"
 import Dashboard from "@/features/dashboard/components/Dashboard"
 
 
