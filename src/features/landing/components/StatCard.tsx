@@ -1,8 +1,8 @@
 
 
-import ProgressBar from "@/ui/ProgressBar";
 import StatHeader from "./statistics/StatCard/StatHeader";
 import StatDescription from "./statistics/StatCard/StatDescription";
+import ProgressBar from "@/ui/data-display/ProgressBar";
 
 interface StatCardProps {
   title: string;
@@ -20,13 +20,12 @@ const StatCard: React.FC<StatCardProps> = ({
   description = null,
   progress = 0,
   progressLabel = '',
-  progressColor = 'bg-primary',
   className = '',
 }) => {
   return (
     <div className={`bg-white p-6 rounded-lg shadow-md text-center ${className}`}>
       <StatHeader title={title} value={value} />
-      {progress !== 0 && <ProgressBar progress={progress} progressColor={progressColor} />}
+      {progress !== 0 && <ProgressBar value={progress} />}
       {progressLabel && <small className="text-gray-500">{progressLabel}</small>}
       <StatDescription description={description} />
     </div>

@@ -1,5 +1,5 @@
-import ProtectedRoute from "@/features/auth/Services/ProtectedRoute"
 import VoteFeed from "@/features/vote-feed"
+import ProtectedRoute from "@/Services/ProtectedRoute"
 
 const page = () => {
   return (

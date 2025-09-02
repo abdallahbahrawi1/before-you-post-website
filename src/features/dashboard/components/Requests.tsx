@@ -68,10 +68,6 @@ const Requests = () => {
               </span>
             ))}
           </div>
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>{req.responses || 0} responses</span>
-            <span>{req.likes || 0} likes</span>
-          </div>
           <div className="flex mt-4 justify-between">
             <button className="btn-secondary px-3 py-1" aria-label="Eidt request">Edit</button>
             <button

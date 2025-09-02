@@ -7,7 +7,7 @@ import axios from 'axios';
 import React from 'react';
 import { AuthFields } from '@/types/types';
 // import { loginOrRegisterAPI } from './Services/AuthService';
-import { UserProfile } from './types/authTypes';
+import { MeResponse, UserProfile } from './types/authTypes';
 import { loginOrRegisterAPI } from '@/Services/AuthService';
 
 
@@ -34,11 +34,9 @@ export const UserProvider = ({ children }: Props) => {
   useEffect(() => {
     async function fetchUser() {
       try {
-        type MeResponse = { user: UserProfile } | UserProfile;
-
         const res = await axios.get<MeResponse>("http://localhost:5000/auth/me", {withCredentials: true});
 
-        const payload = (res.data as any)?.user ?? res.data;
+        const payload: UserProfile = "user" in res.data ? res.data.user : res.data;
 
         // Normalize + validate at compile time
         const userObj = {
@@ -56,20 +54,18 @@ export const UserProvider = ({ children }: Props) => {
       setIsReady(true)
     }
     fetchUser();
-    // const userString = localStorage.getItem("user");
-    // if(userString){
-    //   const userObj: UserProfile = JSON.parse(userString);
-    //   setUser(userObj);
-    // }else {
-    //   setUser(null);
-    // }
 
   }, []);
   
   const loginOrRegister = async (initialFields: AuthFields, apiUrl: string) => {
-    const res = await loginOrRegisterAPI(initialFields, apiUrl);
+    const data = await loginOrRegisterAPI(initialFields, apiUrl);
+
+    if (!data) {
+      setUser(null);
+      return;
+    }
     
-    const payload = (res?.data as any)?.user ?? res?.data;
+    const payload: UserProfile = "user" in data ? data.user : data;
 
     const userObj = {
       id: Number(payload?.id),

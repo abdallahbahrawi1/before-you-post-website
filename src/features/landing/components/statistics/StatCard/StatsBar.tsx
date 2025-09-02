@@ -1,5 +1,5 @@
-import StatCard from "../sections/StatCard";
 import { FaMedal } from "react-icons/fa";
+import StatCard from "../../StatCard";
 
 
 const StatsBar = () => {

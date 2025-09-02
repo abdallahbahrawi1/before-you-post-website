@@ -4,3 +4,5 @@ export type UserProfile = {
   fullName: string;
   karma: number;
 }
+
+export type MeResponse = { user: UserProfile } | UserProfile;

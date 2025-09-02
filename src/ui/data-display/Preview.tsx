@@ -1,5 +1,6 @@
 
 import { AiOutlineClose } from 'react-icons/ai';
+import Image from 'next/image';
 
 interface PreviewProps {
   src: string;
@@ -7,11 +8,14 @@ interface PreviewProps {
 }
 
 export const Preview: React.FC<PreviewProps> = ({ src, onRemove }) => (
-  <div className="flex flex-col items-center gap-4">
-    <img
+  <>
+    <Image
       src={src}
       alt="Preview"
+      width={600}
+      height={240}
       className="w-full max-h-60 rounded-lg object-contain transition-opacity duration-500 ease-in-out"
+      style={{ width: '100%', height: 'auto' }}
     />
     <button
       type="button"
@@ -20,5 +24,5 @@ export const Preview: React.FC<PreviewProps> = ({ src, onRemove }) => (
     >
       <AiOutlineClose size={20} /> Remove
     </button>
-  </div>
+  </>
 );

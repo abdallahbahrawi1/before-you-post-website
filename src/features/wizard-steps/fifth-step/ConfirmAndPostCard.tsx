@@ -65,12 +65,26 @@ export default function ConfirmAndPostCard({
       }
 
       onNext(); // to SuccessCard
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Surface simple, helpful error
-      const msg =
-        err?.response?.data?.message ??
-        err?.message ??
-        "Failed to post your request. Please try again.";
+      let msg = "Failed to post your request. Please try again.";
+      type ErrorWithResponse = {
+        response?: {
+          data?: {
+            message?: string;
+          };
+        };
+        message?: string;
+      };
+
+      if (typeof err === "object" && err !== null) {
+        const typedErr = err as ErrorWithResponse;
+        if ("response" in typedErr && typeof typedErr.response === "object" && typedErr.response !== null) {
+          msg = typedErr.response?.data?.message ?? msg;
+        } else if ("message" in typedErr && typeof typedErr.message === "string") {
+          msg = typedErr.message;
+        }
+      }
       setErrorMsg(msg);
     } finally {
       setSubmitting(false);
