@@ -7,7 +7,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 w-full px-8 py-6 flex justify-between items-center bg-[rgba(250,251,255,0.8)] backdrop-blur-md z-50 shadow-lg">
       <Link href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-purple to-coral font-extrabold text-2xl">
-        supportify
+        Before You Post
       </Link>
       
       <div className="flex gap-8 items-center">
