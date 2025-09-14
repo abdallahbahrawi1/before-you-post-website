@@ -1,9 +1,6 @@
 'use client';
 
 import useAuthForm from "@/hooks/useAuthForm";
-// import Checkbox from "../common/Checkbox";
-// import FormGroup from "../common/FormGroup";
-// import SubmitButton from "../common/SubmitButton";
 import { AuthFields } from "@/types/types";
 import { Button } from "@/ui/inputs/Button";
 import Checkbox from "@/ui/inputs/Checkbox";
@@ -18,7 +15,10 @@ const SignUpForm = () => {
     termsAccepted: false,
   };
 
-  const { formData, handleChange, handleSubmit, error, loading } = useAuthForm(initialFields, 'http://localhost:5000/auth/signup');
+  const { formData, handleChange, handleSubmit, error, loading } = useAuthForm(
+    initialFields, 
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`
+  );
 
   return (
     <form onSubmit={handleSubmit}>
@@ -52,6 +52,11 @@ const SignUpForm = () => {
         onChange={handleChange}
       />
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <Button loading={loading}>Create Account</Button>
     </form>

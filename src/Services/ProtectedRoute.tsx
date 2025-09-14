@@ -11,9 +11,9 @@ const ProtectedRoute = ({ children }: Props) => {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
 
-  useEffect( () => {
+  useEffect(() => {
     console.log(isLoggedIn())
-    if(!isLoggedIn()){
+    if (!isLoggedIn()) {
       router.push('/signin')
     }
   }, [isLoggedIn, router])
