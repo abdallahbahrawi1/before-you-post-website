@@ -7,7 +7,7 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
   const router = useRouter();
   const { loginOrRegister } = useAuth();
   const [formData, setFormData] = useState(initialFields);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,26 +16,23 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+    // Clear error when user starts typing again
+    setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError(null);
     setLoading(true);
+
     try {
       await loginOrRegister(formData, apiUrl);
-      router.push('/dashboard');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      let errorMessage = ""
-      if(error.response){
-        errorMessage = error.response?.data?.error || "An error occurred. Please try again."
-      }else{
-        errorMessage = error;
-      }
-      console.error(errorMessage);
-      setError(errorMessage);
 
+      router.push('/dashboard');
+    } catch (err) {
+      console.error("Authentication error:", err)
+      // Handle any errors (network errors, server errors, etc.)
+      setError(err instanceof Error ? err.message : 'Failed to connect to server');
     } finally {
       setLoading(false);
     }

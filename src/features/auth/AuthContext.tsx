@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 import React from 'react';
@@ -34,7 +34,7 @@ export const UserProvider = ({ children }: Props) => {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await axios.get<MeResponse>("http://localhost:5000/auth/me", {withCredentials: true});
+        const res = await axios.get<MeResponse>("http://localhost:5000/auth/me", { withCredentials: true });
 
         const payload: UserProfile = "user" in res.data ? res.data.user : res.data;
 
@@ -47,7 +47,7 @@ export const UserProvider = ({ children }: Props) => {
         } satisfies UserProfile;
 
         setUser(userObj);
-      } catch (e){
+      } catch (e) {
         console.log(e)
         setUser(null);
       }
@@ -56,7 +56,7 @@ export const UserProvider = ({ children }: Props) => {
     fetchUser();
 
   }, []);
-  
+
   const loginOrRegister = async (initialFields: AuthFields, apiUrl: string) => {
     const data = await loginOrRegisterAPI(initialFields, apiUrl);
 
@@ -64,7 +64,7 @@ export const UserProvider = ({ children }: Props) => {
       setUser(null);
       return;
     }
-    
+
     const payload: UserProfile = "user" in data ? data.user : data;
 
     const userObj = {
@@ -76,17 +76,17 @@ export const UserProvider = ({ children }: Props) => {
 
     setUser(userObj);
   };
-  
+
   const isLoggedIn = () => !!user;
 
   const logout = () => {
     setUser(null);
     navigate.push("/");
   };
-  
+
   return (
     <UserContext.Provider
-      value ={{ loginOrRegister, user, token, setUser, setToken, logout, isLoggedIn }}
+      value={{ loginOrRegister, user, token, setUser, setToken, logout, isLoggedIn }}
     >
       {isReady ? children : null}
     </UserContext.Provider>

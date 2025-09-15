@@ -13,8 +13,6 @@ import SuccessCard from "@/features/wizard-steps/final-step/SuccessCard";
 import { useRouter } from "next/navigation";
 import ConfirmAndPostCard from "@/features/wizard-steps/fifth-step/ConfirmAndPostCard";
 
-
-
 const INITIAL_FORM_DATA: RequestFormData = {
   title: '',
   postContent: '',
@@ -65,14 +63,14 @@ const RequestWizard = () => {
           onChange={handleFormDataChange}
           onNext={goNext}
         />
-      case 3: 
-        return <ConfirmAndPostCard 
-            formData={formData}
-            pointsUsed={pointsUsed}
-            onNext={goNext}
-            onBack={() => setCurrentStep(2)}
-            onEarn={() => router.push("/dashboard/post-feed")}
-          />
+      case 3:
+        return <ConfirmAndPostCard
+          formData={formData}
+          pointsUsed={pointsUsed}
+          onNext={goNext}
+          onBack={() => setCurrentStep(2)}
+          onEarn={() => router.push("/dashboard/post-feed")}
+        />
       case 4:
         return <SuccessCard
           data={formData}

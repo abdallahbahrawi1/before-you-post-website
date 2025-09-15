@@ -1,5 +1,4 @@
-// import Link from 'next/link';
-
+import Link from 'next/link';
 import { Button } from '@/ui/inputs/Button';
 
 const HeroContent: React.FC = () => {
@@ -12,7 +11,9 @@ const HeroContent: React.FC = () => {
         Earn points for helping others and use them to boost your own content. Join our community of creators supporting creators.
       </p>
       <div className="cta-group flex justify-center">
-        <Button variant="cta">Get Support & Grow</Button>
+        <Link href="/dashboard">
+          <Button variant="cta">Get Support & Grow</Button>
+        </Link>
       </div>
     </div>
   );

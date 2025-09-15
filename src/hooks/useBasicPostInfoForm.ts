@@ -27,7 +27,7 @@ export function useBasicPostInfoForm(
       ...values,                // override title and postContent
       imageUrl: initialData.imageUrl ?? null,
     });
-  }, [values, onChange, initialData]);
+  }, [values, onChange]);
 
   const handleChange =
     (field: keyof Fields) =>
