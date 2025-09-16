@@ -7,6 +7,8 @@ export type CreateRequestResponse = {
   balanceAfter: number;   // updated karma
 };
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export async function createRequest(
   data: RequestFormData,
 ): Promise<CreateRequestResponse> {
@@ -19,7 +21,7 @@ export async function createRequest(
     tags: data.tags || [],
   };
 
-  const res = await axios.post<CreateRequestResponse>("http://localhost:5000/api/requests", payload, {
+  const res = await axios.post<CreateRequestResponse>(`${apiUrl}/api/requests`, payload, {
     headers: {
       "Content-Type": "application/json",
     },

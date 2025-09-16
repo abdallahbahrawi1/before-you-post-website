@@ -52,11 +52,6 @@ const SignUpForm = () => {
         onChange={handleChange}
       />
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-          <p className="text-sm">{error}</p>
-        </div>
-      )}
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <Button loading={loading}>Create Account</Button>
     </form>
