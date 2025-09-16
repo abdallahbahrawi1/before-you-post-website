@@ -22,6 +22,8 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    
     setError(null);
     setLoading(true);
 

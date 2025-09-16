@@ -33,7 +33,7 @@ const SignInForm = () => {
         placeholder="Enter your password"
       />
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-      <Button loading={loading}>Sign In</Button>
+      <Button type="submit" loading={loading}>Sign In</Button>
     </form>
   );
 };

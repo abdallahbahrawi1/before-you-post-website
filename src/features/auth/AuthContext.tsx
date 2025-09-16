@@ -22,6 +22,7 @@ type UserContextType = {
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 type Props = { children: React.ReactNode };
 
@@ -34,7 +35,7 @@ export const UserProvider = ({ children }: Props) => {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await axios.get<MeResponse>("http://localhost:5000/auth/me", { withCredentials: true });
+        const res = await axios.get<MeResponse>(`${apiUrl}/auth/me`, { withCredentials: true });
 
         const payload: UserProfile = "user" in res.data ? res.data.user : res.data;
 
