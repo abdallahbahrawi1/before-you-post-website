@@ -2,7 +2,6 @@ import { useState } from "react";
 import { AuthFields } from "@/types/types";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useRouter } from "next/navigation";
-import api from "@/lib/api";
 
 const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
   const router = useRouter();
@@ -29,14 +28,9 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
     setLoading(true);
 
     try {
-      const user = await loginOrRegister(formData, apiUrl);
+      await loginOrRegister(formData, apiUrl);
 
-      if (!user) {
-        setError("Login failed - no user data returned");
-        return;
-      }
-
-      // router.push('/dashboard');
+      router.push('/dashboard');
 
     } catch (err) {
       console.error("Authentication error:", err)

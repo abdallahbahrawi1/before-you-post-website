@@ -63,7 +63,7 @@ export const UserProvider = ({ children }: Props) => {
 
       if (!data) {
         setUser(null);
-        return null;
+        throw new Error("No data returned from login/register API");
       }
 
       const payload: UserProfile = "user" in data ? data.user : data;
