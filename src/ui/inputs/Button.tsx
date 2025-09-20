@@ -59,6 +59,7 @@ export const Button = ({
   children,
   variant = "primary",
   loading = false,
+  type = "submit",
   iconLeft,
   iconRight,
   className = "",
@@ -70,6 +71,7 @@ export const Button = ({
 
   return (
     <button
+      type={type}
       {...rest}
       disabled={disabled || loading}
       className={`${base} ${VARIANT_STYLES[variant]} ${className}`}

@@ -11,7 +11,7 @@ const SignInForm = () => {
     password: '',
   };
 
-  const { formData, handleChange, handleSubmit, error, loading } = useAuthForm(initialFields, 'http://localhost:5000/auth/login');
+  const { formData, handleChange, handleSubmit, error, loading } = useAuthForm(initialFields, "/auth/login");
 
 
   return (

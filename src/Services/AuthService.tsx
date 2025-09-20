@@ -2,10 +2,11 @@ import { MeResponse } from "@/features/auth/types/authTypes";
 import { AuthFields } from "@/types/types";
 import axios, { AxiosError }  from 'axios';
 
+const apiUrl =  process.env.NEXT_PUBLIC_API_URL;
 
-export const loginOrRegisterAPI = async (initialFields: AuthFields, apiUrl: string): Promise<MeResponse | undefined>  => {
+export const loginOrRegisterAPI = async (initialFields: AuthFields, url: string): Promise<MeResponse | undefined>  => {
   try {
-    const response = await axios.post<MeResponse>(apiUrl, initialFields, { withCredentials: true });
+    const response = await axios.post<MeResponse>(apiUrl + url, initialFields, { withCredentials: true });
     return response.data;
   } catch (err) {
     let msg = "";

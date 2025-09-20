@@ -6,7 +6,6 @@ import axios from 'axios';
 
 import React from 'react';
 import { AuthFields } from '@/types/types';
-// import { loginOrRegisterAPI } from './Services/AuthService';
 import { MeResponse, UserProfile } from './types/authTypes';
 import { loginOrRegisterAPI } from '@/Services/AuthService';
 
@@ -58,24 +57,33 @@ export const UserProvider = ({ children }: Props) => {
 
   }, []);
 
-  const loginOrRegister = async (initialFields: AuthFields, apiUrl: string) => {
-    const data = await loginOrRegisterAPI(initialFields, apiUrl);
+  const loginOrRegister = async (initialFields: AuthFields, apiUrl: string): Promise<UserProfile | null> => {
+    try {
+      const data = await loginOrRegisterAPI(initialFields, apiUrl);
 
-    if (!data) {
+      if (!data) {
+        setUser(null);
+        return null;
+      }
+
+      const payload: UserProfile = "user" in data ? data.user : data;
+
+      const userObj = {
+        id: Number(payload?.id),
+        email: String(payload?.email ?? ""),
+        fullName: String(payload?.fullName ?? ""),
+        karma: Number(payload?.karma ?? 0),
+      } satisfies UserProfile;
+
+      setUser(userObj);
+
+      // Return the user object to indicate success
+      return userObj;
+    } catch (error) {
+      console.error("Login/register failed:", error);
       setUser(null);
-      return;
+      return null;
     }
-
-    const payload: UserProfile = "user" in data ? data.user : data;
-
-    const userObj = {
-      id: Number(payload?.id),
-      email: String(payload?.email ?? ""),
-      fullName: String(payload?.fullName ?? ""),
-      karma: Number(payload?.karma ?? 0),
-    } satisfies UserProfile;
-
-    setUser(userObj);
   };
 
   const isLoggedIn = () => !!user;
