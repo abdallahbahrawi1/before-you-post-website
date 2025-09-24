@@ -72,8 +72,8 @@ const ContentTypeCategoriesStep: React.FC<Props> = ({ initialData, onChange, onN
           </p>
 
           <form onSubmit={handleSubmit}>
-            <SectionWrapper 
-              title="Content Type" 
+            <SectionWrapper
+              title="Content Type"
               helpText="Select the primary format for your content.">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {contentTypeOptions.map(({ key, icon, label }) => (
@@ -100,8 +100,8 @@ const ContentTypeCategoriesStep: React.FC<Props> = ({ initialData, onChange, onN
               )}
             </SectionWrapper>
 
-            <SectionWrapper 
-              title="Categories / Tags" 
+            <SectionWrapper
+              title="Categories / Tags"
               helpText="Add relevant tags to help reviewers understand the topic.">
               <div className="flex flex-wrap gap-2 border border-transparent p-2 mb-2 min-h-[40px]">
                 {tags.map(tag => (

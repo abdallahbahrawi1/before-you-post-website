@@ -1,6 +1,4 @@
-"use client";
-import avatar from "../../../../public/assets/avatar.png"
-import featuredImage from "../../../../public/assets/featured-image.png"
+'use client'
 import ProgressBar from "@/ui/data-display/ProgressBar";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -189,12 +187,12 @@ export default function VoteFeed() {
         <div className="flex w-full overflow-hidden rounded-2xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.05)] transition">
           {/* Post Preview (Left) */}
           <PostPreview
-            avatarUrl={currentRequest.user.avatarUrl || avatar.src}
+            avatarUrl={currentRequest.user.avatarUrl}
             username={currentRequest.user.username}
             karma={currentRequest.user.karma}
-            featuredImageUrl={currentRequest.featuredImageUrl || featuredImage.src}
+            featuredImageUrl={currentRequest.featuredImageUrl}
             postTitle={currentRequest.title}
-            postSnippet={currentRequest.description}
+            postSnippet={currentRequest.postContent}
           />
 
           {/* Feedback Panel (Right) */}

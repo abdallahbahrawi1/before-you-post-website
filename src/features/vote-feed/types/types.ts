@@ -7,6 +7,7 @@ export interface VoteFeedRequest {
   id: number;
   title: string;
   description: string;
+  postContent: string;
   category: string;
   pointsOffered: number;
   status: string;

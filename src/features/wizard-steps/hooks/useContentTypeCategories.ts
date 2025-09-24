@@ -35,7 +35,7 @@ export const useContentTypeCategories = (
       otherContentType,
       tags,
     });
-  }, [contentType, otherContentType, tags, onChange, initial]); 
+  }, [contentType, otherContentType, tags, onChange]); 
 
   return {
     /* state */

@@ -14,7 +14,7 @@ type ConfirmAndPostCardProps = {
   onNext: () => void;      // CTA: confirm & post
 };
 
-const BASE_FEE = 10; // MVP constants
+const BASE_FEE = 15; // MVP constants
 const IMAGE_BOOST = 0;
 const EXPEDITED = 0;
 
@@ -56,7 +56,6 @@ export default function ConfirmAndPostCard({
     setErrorMsg(null);
     setSubmitting(true);
     try {
-      console.log(formData)
       const result = await createRequest(formData);
 
       // Update local user points from server

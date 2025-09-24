@@ -118,14 +118,14 @@ export function useVoteFeed(): UseVoteFeedReturn {
       let errorMessage = 'Failed to submit review';
       if (error && typeof error === 'object' && 'response' in error) {
         const apiError = error as { response: { status: number; data?: { message?: string } } };
-        
+
         if (apiError.response.data?.message?.includes('already reviewed')) {
           console.log('Request already reviewed, fetching next...');
           setState(prev => ({ ...prev, isSubmitting: false }));
           await fetchNextRequest(); // Skip to next request
           return true; // Treat as success since we're moving forward
         }
-        
+
         if (apiError.response.status === 404) {
           errorMessage = 'Review service not available. Please try again later.';
         } else if (apiError.response.status === 401) {

@@ -1,8 +1,12 @@
 import { useAuth } from "@/features/auth/AuthContext";
 import ProgressBar from "@/ui/data-display/ProgressBar";
+import { useEffect } from "react";
 
 const PointsTracker = () =>{
-  const { user } = useAuth();
+  const { user, fetchAndSetUser } = useAuth();
+
+  useEffect(() => { void fetchAndSetUser(); }, [fetchAndSetUser]);
+
   return (
     <div className="points-tracker bg-white p-6 rounded-xl shadow-md flex justify-between items-center mb-8">
       <div>

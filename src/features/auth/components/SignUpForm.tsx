@@ -17,8 +17,9 @@ const SignUpForm = () => {
 
   const { formData, handleChange, handleSubmit, error, loading } = useAuthForm(
     initialFields, 
-    `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`
+    `/auth/signup`
   );
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -53,7 +54,7 @@ const SignUpForm = () => {
       />
 
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-      <Button loading={loading}>Create Account</Button>
+      <Button type="submit" loading={loading}>Create Account</Button>
     </form>
   );
 };

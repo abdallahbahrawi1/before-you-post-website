@@ -24,11 +24,7 @@ const Tabs = ({ activeTab, setActiveTab, tabs }: TabsProps) => {
 
         // CTA style for "New Request"
         const cta =
-          "group rounded-full px-5 py-2 text-white " +
-          "bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-rose-600 " +
-          "shadow-lg shadow-fuchsia-500/20 hover:shadow-fuchsia-500/40 " +
-          "hover:scale-[1.02] active:scale-[0.99] " +
-          "focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+          "rounded-full px-5 py-2 text-white bg-indigo-600 hover:bg-indigo-700 transition focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2";
 
         return (
           <button

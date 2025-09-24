@@ -29,9 +29,7 @@ const useAuthForm = (initialFields: AuthFields, apiUrl: string) => {
 
     try {
       await loginOrRegister(formData, apiUrl);
-
       router.push('/dashboard');
-
     } catch (err) {
       console.error("Authentication error:", err)
       // Handle any errors (network errors, server errors, etc.)

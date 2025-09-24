@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -18,6 +18,7 @@ type UserContextType = {
   setToken: (token: string | null) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
+  fetchAndSetUser: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -31,38 +32,34 @@ export const UserProvider = ({ children }: Props) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await axios.get<MeResponse>(`${apiUrl}/auth/me`, { withCredentials: true });
-
-        const payload: UserProfile = "user" in res.data ? res.data.user : res.data;
-
-        // Normalize + validate at compile time
-        const userObj = {
-          id: Number(payload?.id),
-          email: String(payload?.email ?? ""),
-          fullName: String(payload?.fullName ?? ""),
-          karma: Number(payload?.karma ?? 0),
-        } satisfies UserProfile;
-
-        setUser(userObj);
-      } catch (e) {
-        console.log(e)
-        setUser(null);
-      }
-      setIsReady(true)
+  const fetchAndSetUser = useCallback(async () => {
+    try {
+      const res = await axios.get<MeResponse>(`${apiUrl}/auth/me`, { withCredentials: true });
+      const payload: UserProfile = "user" in res.data ? res.data.user : res.data;
+      const userObj = {
+        id: Number(payload?.id),
+        email: String(payload?.email ?? ""),
+        fullName: String(payload?.fullName ?? ""),
+        karma: Number(payload?.karma ?? 0),
+      } satisfies UserProfile;
+      setUser(userObj);
+    } catch (e) {
+      console.log(e);
+      setUser(null);
+    } finally {
+      setIsReady(true);
     }
-    fetchUser();
-
   }, []);
+
+  useEffect(() => {
+    fetchAndSetUser();
+  }, [fetchAndSetUser]);
 
   const loginOrRegister = async (initialFields: AuthFields, apiUrl: string): Promise<UserProfile | null> => {
     try {
       const data = await loginOrRegisterAPI(initialFields, apiUrl);
 
       if (!data) {
-        setUser(null);
         throw new Error("No data returned from login/register API");
       }
 
@@ -76,13 +73,11 @@ export const UserProvider = ({ children }: Props) => {
       } satisfies UserProfile;
 
       setUser(userObj);
-
-      // Return the user object to indicate success
+      
       return userObj;
     } catch (error) {
-      console.error("Login/register failed:", error);
       setUser(null);
-      return null;
+      throw error;
     }
   };
 
@@ -95,7 +90,7 @@ export const UserProvider = ({ children }: Props) => {
 
   return (
     <UserContext.Provider
-      value={{ loginOrRegister, user, token, setUser, setToken, logout, isLoggedIn }}
+      value={{ loginOrRegister, user, token, setUser, setToken, logout, isLoggedIn, fetchAndSetUser }}
     >
       {isReady ? children : null}
     </UserContext.Provider>

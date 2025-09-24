@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 import BasicPostInfo from "@/features/wizard-steps/forth-step/BasicPostInfo";
 import ImageUploadStep from "@/features/wizard-steps/second-step/ImageUploadStep";
 import ContentTypeCategoriesStep from "@/features/wizard-steps/third-step/ContentTypeCategoriesStep";
@@ -12,6 +12,7 @@ import { useLocalStorage } from "@/features/dashboard/hooks/useLocalStorage";
 import SuccessCard from "@/features/wizard-steps/final-step/SuccessCard";
 import { useRouter } from "next/navigation";
 import ConfirmAndPostCard from "@/features/wizard-steps/fifth-step/ConfirmAndPostCard";
+import { useAuth } from "@/features/auth/AuthContext";
 
 const INITIAL_FORM_DATA: RequestFormData = {
   title: '',
@@ -24,18 +25,27 @@ const INITIAL_FORM_DATA: RequestFormData = {
 
 const RequestWizard = () => {
   const { currentStep, setCurrentStep, maxStepReached, goNext, reset } = useWizard();
-
+  const { fetchAndSetUser } = useAuth();
   const [formData, setFormData] = useLocalStorage<RequestFormData>("newRequestFormData", INITIAL_FORM_DATA);
+
+  useEffect(() => {
+    if (currentStep === 4) {
+      // Refresh user points
+      void fetchAndSetUser();
+      // Clear localStorage for the form
+      setFormData(INITIAL_FORM_DATA);
+    }
+  }, [currentStep, fetchAndSetUser, setFormData]);
 
   const handleFormDataChange = useCallback((data: RequestFormData) => {
     setFormData(data)
   }, [setFormData])
 
   /** Simple example: 1 point per tag + 20 base */
-  const pointsUsed = 10;
+  const pointsUsed = 15;
   const router = useRouter();
-  const viewRequest = () => router.push(`/dashboard/requests`);
-
+  const viewRequest = () => router.push(`/dashboard/`);
+  const helpOthers = () => router.push(`/vote-feed/`);
 
   const createAnother = () => {
     // clear form + go back to first step
@@ -77,6 +87,7 @@ const RequestWizard = () => {
           pointsUsed={pointsUsed}
           onViewRequest={viewRequest}
           onCreateAnother={createAnother}
+          onHelpOthers={helpOthers}
         />
       default:
         return <div className="text-center text-xl">Step Not Found!{currentStep}</div>;

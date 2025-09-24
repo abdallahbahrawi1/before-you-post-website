@@ -7,6 +7,7 @@ interface SuccessCardProps {
   pointsUsed: number;             // whatever logic you use
   onViewRequest: () => void;      // CTA 1
   onCreateAnother: () => void;    // CTA 2
+  onHelpOthers: () => void;    // CTA 3
 }
 
 const SuccessCard: FC<SuccessCardProps> = ({
@@ -14,6 +15,7 @@ const SuccessCard: FC<SuccessCardProps> = ({
   pointsUsed,
   onViewRequest,
   onCreateAnother,
+  onHelpOthers,
 }) => (
   <main className="w-full px-4">
     <section
@@ -74,12 +76,12 @@ const SuccessCard: FC<SuccessCardProps> = ({
         Create another request
       </button>
 
-      <a
-        href="#"
+      <button
+        onClick={onHelpOthers}
         className="inline-block pt-1 text-sm font-medium text-purple-600 transition hover:text-pink-500"
       >
         Review someone else&rsquo;s post to earn points &rarr;
-      </a>
+      </button>
     </section>
   </main>
 );
