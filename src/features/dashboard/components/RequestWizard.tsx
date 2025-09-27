@@ -41,7 +41,6 @@ const RequestWizard = () => {
     setFormData(data)
   }, [setFormData])
 
-  /** Simple example: 1 point per tag + 20 base */
   const pointsUsed = 15;
   const router = useRouter();
   const viewRequest = () => router.push(`/dashboard/`);

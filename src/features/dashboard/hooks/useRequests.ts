@@ -12,7 +12,7 @@ export const useRequests = () => {
       setLoading(true);
       setError(null);
       const response = await api.get('/api/requests/my-requests');
-      const data = response.data as { requests: Request[] };
+      const data = response.data.data as { requests: Request[] };
       setRequests(data.requests || []);
     } catch (err) {
       setError('Failed to fetch requests');
